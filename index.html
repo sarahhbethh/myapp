@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarah Santini — Digital Designer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #111113;
+            --bg-secondary: #18181b;
+            --bg-card: rgba(28, 28, 30, 0.8);
+            --bg-glass: rgba(255, 255, 255, 0.05);
+            --text-primary: #f5f5f7;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --text-tertiary: rgba(255, 255, 255, 0.4);
+            --accent-blue: #0071e3;
+            --accent-purple: #bf5af2;
+            --accent-cyan: #5ac8fa;
+            --border-subtle: rgba(255, 255, 255, 0.1);
+            --shadow-glow: 0 0 80px rgba(0, 113, 227, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Ambient background */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.4;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg, #0071e3, #5856d6);
+            top: -200px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #bf5af2, #ff375f);
+            bottom: 20%;
+            left: -100px;
+            animation-delay: -7s;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #30d158, #5ac8fa);
+            bottom: -100px;
+            right: 20%;
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.05); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 16px 48px;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 400;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Main content */
+        main {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 120px 24px 80px;
+        }
+
+        .hero-eyebrow {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--accent-cyan);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards;
+            animation-delay: 0.2s;
+        }
+
+        .hero h1 {
+            font-size: clamp(48px, 10vw, 96px);
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards;
+            animation-delay: 0.4s;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(18px, 3vw, 24px);
+            font-weight: 300;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 48px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards;
+            animation-delay: 0.6s;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards;
+            animation-delay: 0.8s;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 980px;
+            font-size: 15px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #0077ed;
+            transform: scale(1.02);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(90, 200, 250, 0.1);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section styling */
+        section {
+            padding: 120px 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-eyebrow {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent-blue);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: clamp(36px, 6vw, 56px);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Project Cards */
+        .project-card {
+            background: var(--bg-card);
+            border-radius: 24px;
+            border: 1px solid var(--border-subtle);
+            overflow: hidden;
+            margin-bottom: 80px;
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+        }
+
+        .project-hero {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .project-hero-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.6;
+        }
+
+        .project-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.8) 100%);
+        }
+
+        .project-hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .project-tag {
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .project-title {
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .project-client {
+            font-size: 18px;
+            color: var(--accent-cyan);
+            font-weight: 500;
+        }
+
+        .project-body {
+            padding: 48px;
+        }
+
+        .project-overview {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 48px;
+            margin-bottom: 64px;
+        }
+
+        .project-meta h3 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .project-meta p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .project-description {
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .project-description p {
+            margin-bottom: 20px;
+        }
+
+        .project-stat {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 8px;
+            background: var(--bg-glass);
+            padding: 16px 24px;
+            border-radius: 16px;
+            margin-top: 24px;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Image Gallery */
+        .project-gallery {
+            margin-top: 48px;
+        }
+
+        .gallery-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-item-tall {
+            aspect-ratio: 9/16;
+            grid-row: span 2;
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Process Section */
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .process-item {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .process-item:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-4px);
+        }
+
+        .process-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .process-item h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .process-item p {
+            font-size: 14px;
+            color: var(--text-tertiary);
+        }
+
+        /* Contact Section */
+        #contact {
+            text-align: center;
+            padding-bottom: 160px;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-top: 48px;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 32px;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            border-color: var(--accent-blue);
+            background: rgba(0, 113, 227, 0.1);
+        }
+
+        .contact-icon {
+            width: 24px;
+            height: 24px;
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 24px;
+            border-top: 1px solid var(--border-subtle);
+            color: var(--text-tertiary);
+            font-size: 13px;
+        }
+
+        /* Responsive */
+        @media (min-width: 1400px) {
+            .project-overview {
+                grid-template-columns: 1fr 2.5fr;
+                gap: 64px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .process-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+
+            .project-body {
+                padding: 64px 80px;
+            }
+
+            .section-header {
+                margin-bottom: 100px;
+            }
+        }
+
+        @media (min-width: 1800px) {
+            section {
+                max-width: 1600px;
+            }
+
+            .hero h1 {
+                font-size: 112px;
+            }
+
+            .project-hero {
+                height: 600px;
+            }
+
+            .project-title {
+                font-size: 56px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .project-overview {
+                grid-template-columns: 1fr 1.5fr;
+                gap: 40px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .process-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 16px 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            section {
+                padding: 80px 20px;
+            }
+
+            .project-overview {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .project-body {
+                padding: 32px 24px;
+            }
+
+            .project-hero {
+                height: 350px;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-item-tall {
+                grid-row: span 1;
+                aspect-ratio: 9/16;
+            }
+
+            .process-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-tags {
+                gap: 6px;
+            }
+
+            .project-tag {
+                font-size: 11px;
+                padding: 5px 10px;
+            }
+        }
+
+        /* Scroll animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-bg">
+        <div class="ambient-orb orb-1"></div>
+        <div class="ambient-orb orb-2"></div>
+        <div class="ambient-orb orb-3"></div>
+    </div>
+
+    <nav>
+        <div class="nav-content">
+            <div class="nav-logo">Sarah Santini</div>
+            <ul class="nav-links">
+                <li><a href="#work">Work</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero -->
+        <section class="hero">
+            <p class="hero-eyebrow">Digital Designer</p>
+            <h1>Sarah Santini</h1>
+            <p class="hero-subtitle">Crafting intuitive digital experiences for enterprise retail — from wireframes to nationwide deployment.</p>
+            <div class="hero-cta">
+                <a href="#work" class="btn btn-primary">View Work</a>
+            </div>
+        </section>
+
+        <!-- Work Section -->
+        <section id="work">
+            <div class="section-header">
+                <p class="section-eyebrow">Selected Work</p>
+                <h2 class="section-title">Featured Projects</h2>
+                <p class="section-subtitle">Enterprise digital experiences designed for millions of customers across thousands of retail locations.</p>
+            </div>
+
+            <!-- Project 1: AT&T Holiday Hub -->
+            <article class="project-card reveal">
+                <div class="project-hero" style="background: linear-gradient(135deg, #00a8e1 0%, #0057b8 100%);">
+                    <div class="project-hero-content">
+                        <div class="project-tags">
+                            <span class="project-tag">UX Design</span>
+                            <span class="project-tag">UI Design</span>
+                            <span class="project-tag">Prototyping</span>
+                            <span class="project-tag">Strategy</span>
+                        </div>
+                        <h3 class="project-title">AT&T Holiday Hub</h3>
+                        <p class="project-client">AT&T × TPN</p>
+                    </div>
+                </div>
+                <div class="project-body">
+                    <div class="project-overview">
+                        <div class="project-meta">
+                            <h3>Role</h3>
+                            <p>Lead Designer</p>
+
+                            <h3>Timeline</h3>
+                            <p>2024 – 2025</p>
+
+                            <h3>Platform</h3>
+                            <p>Mobile Web (unlock.att.com)</p>
+
+                            <h3>Deliverables</h3>
+                            <p>Wireframes, Prototypes, UI Design, Bilingual Support (EN/ES)</p>
+                        </div>
+                        <div class="project-description">
+                            <p>Designed the AT&T Holiday Hub — a digital gift guide experience for in-store customers during the holiday season. The challenge was creating a clean, focused landing page that didn't overwhelm customers while still surfacing the most relevant content.</p>
+
+                            <p>The client was initially unsure what needed to be prioritized on the homepage. Through strategic recommendations based on prior year performance data and multiple proof-of-concept prototypes, we established a streamlined three-entry homepage with dedicated pages for the Gift Guide, Expert Picks, and Holiday Arcade games.</p>
+
+                            <p>I also led the design and continuation of the Holiday Arcade games from the previous year — interactive experiences that drove customer engagement and were brought back by client request for a second consecutive year.</p>
+
+                            <div class="project-stat">
+                                <span class="stat-number">5,800+</span>
+                                <span class="stat-label">AT&T retail stores nationwide</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-gallery">
+                        <h4 class="gallery-title">Process & Deliverables</h4>
+                        <div class="gallery-grid">
+                            <div class="gallery-item">
+                                <img src="8241991190863327140_2.jpeg" alt="Initial wireframe sketches showing homepage layout concepts">
+                                <div class="gallery-caption">Hand-drawn wireframes</div>
+                            </div>
+                            <div class="gallery-item gallery-item-tall">
+                                <img src="IMG_1333.png" alt="Final mobile UI showing Holiday Hub homepage">
+                                <div class="gallery-caption">Final UI — Mobile</div>
+                            </div>
+                            <div class="gallery-item">
+                                <img src="IMG_1073.jpeg" alt="Side-by-side comparison of English and Spanish versions">
+                                <div class="gallery-caption">Bilingual design system</div>
+                            </div>
+                            <div class="gallery-item">
+                                <img src="IMG_3351_2.jpeg" alt="Physical NFC gift box in AT&T store">
+                                <div class="gallery-caption">In-store NFC activation</div>
+                            </div>
+                            <div class="gallery-item">
+                                <img src="IMG_0136.jpeg" alt="Design workspace showing iteration process">
+                                <div class="gallery-caption">Design iteration</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="process-grid">
+                        <div class="process-item">
+                            <div class="process-icon">📝</div>
+                            <h4>Discovery</h4>
+                            <p>Stakeholder interviews & prior year analysis</p>
+                        </div>
+                        <div class="process-item">
+                            <div class="process-icon">✏️</div>
+                            <h4>Wireframing</h4>
+                            <p>Low-fi sketches & layout exploration</p>
+                        </div>
+                        <div class="process-item">
+                            <div class="process-icon">🎨</div>
+                            <h4>UI Design</h4>
+                            <p>High-fidelity mockups in Figma</p>
+                        </div>
+                        <div class="process-item">
+                            <div class="process-icon">🔄</div>
+                            <h4>Prototyping</h4>
+                            <p>Interactive POCs for client review</p>
+                        </div>
+                        <div class="process-item">
+                            <div class="process-icon">🚀</div>
+                            <h4>Delivery</h4>
+                            <p>Dev handoff & QA support</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Project 2: Google Wallet -->
+            <article class="project-card reveal">
+                <div class="project-hero" style="background: linear-gradient(135deg, #4285f4 0%, #0f9d58 50%, #f4b400 100%);">
+                    <div class="project-hero-content">
+                        <div class="project-tags">
+                            <span class="project-tag">Motion Design</span>
+                            <span class="project-tag">Digital Signage</span>
+                            <span class="project-tag">Retail</span>
+                        </div>
+                        <h3 class="project-title">Google Wallet Demo</h3>
+                        <p class="project-client">AT&T × Google</p>
+                    </div>
+                </div>
+                <div class="project-body">
+                    <div class="project-overview">
+                        <div class="project-meta">
+                            <h3>Role</h3>
+                            <p>Designer</p>
+
+                            <h3>Timeline</h3>
+                            <p>December 2022 – January 2023</p>
+
+                            <h3>Platform</h3>
+                            <p>In-store digital display (1080×2400)</p>
+
+                            <h3>Deliverables</h3>
+                            <p>Storyboards, Motion Design, Video Production</p>
+                        </div>
+                        <div class="project-description">
+                            <p>Created an animated attract loop for Google Pixel demo devices in AT&T retail stores, promoting Google Wallet's features. The 20-second looping video showcases tap-to-pay functionality, boarding passes, concert tickets, and loyalty cards.</p>
+
+                            <p>The project involved close collaboration with both AT&T and Google stakeholders through multiple design rounds, addressing feedback on animation timing, typography, logo placement, and brand compliance. A key challenge was coordinating the launch timing with a new Google phone release.</p>
+
+                            <p>The final deliverable balances Google's brand guidelines with AT&T's retail environment, featuring clean typography, smooth transitions, and a call-to-action driving Google Play downloads.</p>
+
+                            <div class="project-stat">
+                                <span class="stat-number">5,800+</span>
+                                <span class="stat-label">stores running this demo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-gallery">
+                        <h4 class="gallery-title">Storyboard & Final Frames</h4>
+                        <div class="gallery-grid">
+                            <div class="gallery-item gallery-item-tall">
+                                <img src="Artboard_12.png" alt="Final frame showing Google Wallet interface on Pixel phone">
+                                <div class="gallery-caption">Final frame — Download CTA</div>
+                            </div>
+                            <div class="gallery-item">
+                                <img src="IMG_3107.PNG" alt="Demo phone in AT&T retail store display">
+                                <div class="gallery-caption">In-store deployment</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="process-grid">
+                        <div class="process-item">
+                            <div class="process-icon">🎬</div>
+                            <h4>Storyboarding</h4>
+                            <p>Frame-by-frame planning</p>
+                        </div>
+                        <div class="process-item">
+                            <div class="process-icon">🔁</div>
+                            <h4>Iteration</h4>
+                            <p>3 rounds of client feedback</p>
+                        </div>
+                        <div class="process-item">
+                            <div class="process-icon">⏱️</div>
+                            <h4>Timing</h4>
+                            <p>Optimized for 20-second loop</p>
+                        </div>
+                        <div class="process-item">
+                            <div class="process-icon">✅</div>
+                            <h4>Approval</h4>
+                            <p>Dual brand sign-off</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="reveal">
+            <div class="section-header">
+                <p class="section-eyebrow">About</p>
+                <h2 class="section-title">Designing for Scale</h2>
+                <p class="section-subtitle">I specialize in creating digital experiences that work across thousands of touchpoints — from mobile web apps to in-store digital signage.</p>
+            </div>
+
+            <div class="process-grid" style="max-width: 800px; margin: 0 auto;">
+                <div class="process-item">
+                    <div class="process-icon">🎯</div>
+                    <h4>Strategy-Led</h4>
+                    <p>Data-driven decisions backed by user insights and prior performance</p>
+                </div>
+                <div class="process-item">
+                    <div class="process-icon">🔄</div>
+                    <h4>Iterative</h4>
+                    <p>Multiple rounds of refinement to nail the perfect solution</p>
+                </div>
+                <div class="process-item">
+                    <div class="process-icon">🌐</div>
+                    <h4>Scalable</h4>
+                    <p>Designs that work across thousands of retail locations</p>
+                </div>
+                <div class="process-item">
+                    <div class="process-icon">🤝</div>
+                    <h4>Collaborative</h4>
+                    <p>Cross-functional work with clients, devs, and stakeholders</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Sarah Santini. Designed with precision.</p>
+    </footer>
+
+    <script>
+        // Scroll reveal animation
+        const reveals = document.querySelectorAll('.reveal');
+
+        const revealOnScroll = () => {
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const revealTop = el.getBoundingClientRect().top;
+                const revealPoint = 150;
+
+                if (revealTop < windowHeight - revealPoint) {
+                    el.classList.add('visible');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll(); // Initial check
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
